@@ -4,60 +4,43 @@ from  bs4  import BeautifulSoup
 import urllib
 import codecs
 import os,glob
+import json
 
-def enlist_talk_names(path,dict_):
+def enlist_talk_names(path,list):
     r = urllib.urlopen(path).read()
     soup = BeautifulSoup(r)
     talks= soup.find_all("a",class_='')
+    #print(talks)
     for i in talks:
-        print i 
-        if i.attrs['href'].find('/talks/')==0 and dict_.get(i.attrs['href'])!=1:
-            dict_[i.attrs['href']]=1    
-    return dict_
+        if i.attrs['href'].find('/talks/')==0 :
 
-all_talk_names={}
-for i in xrange(1,61):
+            talkname = i.attrs['href'].split('?')[0]
+            list.append(talkname)
+
+    return list
+
+all_talk_names= []
+
+for i in xrange(1,2):
     path='https://www.ted.com/talks?language=hi&page=%d'%(i)
     all_talk_names=enlist_talk_names(path,all_talk_names)
-    #print all_talk_names
 
-def extract_talk(path,talk_name):
-    r=urllib.urlopen(path).read()
-    soup=BeautifulSoup(r)
-    df=pd.DataFrame()
-    #print path
-    for i in soup.findAll('link'):
-        if i.get('href')!=None and i.attrs['href'].find('?language=')!=-1:
-            #print i.attrs['href']
-            lang=i.attrs['hreflang']
-            path=i.attrs['href']
-            r1=urllib.urlopen(path).read()
-            soup1=BeautifulSoup(r1)
-            time_frame=[]
-            text_talk=[]
-            for i in soup1.findAll('span',class_='talk-transcript__fragment'):
-                time_frame.append(i.attrs['data-time'])
-                text_talk.append(i.text.replace('\n',' '))
-            #print len(time_frame),len(text_talk)
-            df1=pd.DataFrame()
-            df1[lang]=text_talk
-            df1[lang+'_time_frame']=time_frame
-            df=pd.concat([df,df1],axis=1)
-    df.to_csv(talk_name+'.csv',sep='\t',encoding='utf-8')
 
-for i in all_talk_names:
-    #print('https://www.ted.com'+i+'/transcript',i[7:])
-    #print i
-    extract_talk('https://www.ted.com'+i+'/transcript',i[7:])
+#print all_talk_names
 
-path='/Users/someaditya/Desktop/TedCrawler/'
-os.chdir(path)
-pieces=[]
-for file in glob.glob('*.csv'):
-    print file
-    frame=pd.read_csv(path+file,sep='\t',encoding='utf-8')
-    pieces.append(frame)
-df= pd.concat(pieces, ignore_index=True)
 
-df.to_csv('All_TED_TALKS_DATA_1.csv',sep='\t',encoding='utf-8')
+url = "https://www.ted.com/talks/will_marshall_the_mission_to_create_a_searchable_database_of_earth_s_surface/transcript.json?language=en"
+response = urllib.urlopen(url)
+data = json.loads(response.read())
+#print data
+
+for key, value in data.items():
+    print value
+
+
+
+
+
+
+
 
