@@ -26,7 +26,9 @@ for i in xrange(1,2):
     all_talk_names=enlist_talk_names(path,all_talk_names)
 
 
-#print all_talk_names
+#all_talk_names contains the list of TED Talks in Hindi Language
+
+#Go through the list one by one and get the transcripts
 
 
 url = "https://www.ted.com/talks/will_marshall_the_mission_to_create_a_searchable_database_of_earth_s_surface/transcript.json?language=en"
