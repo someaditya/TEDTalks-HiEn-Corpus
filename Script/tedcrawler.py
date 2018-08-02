@@ -6,6 +6,11 @@ import codecs
 import os,glob
 import json
 
+import sys
+
+reload(sys)
+sys.setdefaultencoding('utf8')
+
 #Web Scrapper to fetch the list of TED Talks in Hindi
 
 def List_Talks(path,list):
@@ -59,7 +64,7 @@ list_of_talks = list(set(list_of_talks))
 
 for x in list_of_talks:
     url="https://www.ted.com/"+x+"/transcript.json?"
-    EnglishTranscript(url)
+    #EnglishTranscript(url)
     HindiTranscript(url)
 
 
@@ -67,9 +72,17 @@ for x in list_of_talks:
 url = "https://www.ted.com//talks/marina_abramovic_an_art_made_of_trust_vulnerability_and_connection/transcript.json?language=en"
 response = urllib.urlopen(url)
 data = json.loads(response.read())
-for key, value in data.items():
-    print value
 
+
+def iterate(data):
+    for key, value in data.items():
+        if isinstance(value, dict):
+            print(value)
+            iterate(value)
+            continue
+    
+
+iterate(data)
 
 
 
