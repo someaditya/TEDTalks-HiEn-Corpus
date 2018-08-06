@@ -5,6 +5,7 @@ import urllib
 import codecs
 import os,glob
 import json
+import requests
 
 import sys
 
@@ -36,12 +37,10 @@ def readjson(data,lang):
         for d in cues['cues']: #iterate through cues
             print d['text']
             sentence =  d['text'] 
-            if(lang == "hi"):
-                print("Writing Hindi Transcript")
+            if(lang == "hi"):      
                 file = open("hindi.txt","a")
                 file.write(str(sentence).encode('utf-8')+"\n") 
             else:
-                print("Writing English Transcript")
                 file = open("english.txt","a")
                 file.write(str(sentence).encode('utf-8')+"\n")
 
@@ -52,9 +51,10 @@ def EnglishTranscript(url):
 
     url = url + "language=en"
     print url
-    response = urllib.urlopen(url)
-    data = json.loads(response.read())
+    data = requests.get(url).json()
+    #data = json.loads(str(response))
     #print data
+    print("Writing English Transcript")
     readjson(data,"eng")
 
 #Fetch the Hindi Transcript
@@ -63,9 +63,9 @@ def HindiTranscript(url):
 
     url = url + "language=hi"
     print url
-    response = urllib.urlopen(url)
-    data = json.loads(response.read())
+    data = requests.get(url).json() 
     #print data
+    print("Writing Hindi Transcript")
     readjson(data,"hi")
 
 all_talk_names= []
