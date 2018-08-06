@@ -10,6 +10,7 @@ import sys
 
 reload(sys)
 sys.setdefaultencoding('utf8')
+sentence = ' '
 
 #Web Scrapper to fetch the list of TED Talks in Hindi
 
@@ -26,6 +27,25 @@ def List_Talks(path,list):
 
     return list
 
+#Method to read the Online JSON from TED Talks Transcript URLs
+
+def readjson(data,lang):
+    if "paragraphs" not in data: # check if paragraphs node exits
+        return
+    for cues in data['paragraphs']: #iterate through paragraphs node
+        for d in cues['cues']: #iterate through cues
+            print d['text']
+            sentence =  d['text'] 
+            if(lang == "hi"):
+                print("Writing Hindi Transcript")
+                file = open("hindi.txt","a")
+                file.write(str(sentence).encode('utf-8')+"\n") 
+            else:
+                print("Writing English Transcript")
+                file = open("english.txt","a")
+                file.write(str(sentence).encode('utf-8')+"\n")
+
+
 #Fetch the English Transcript
 
 def EnglishTranscript(url):
@@ -35,8 +55,7 @@ def EnglishTranscript(url):
     response = urllib.urlopen(url)
     data = json.loads(response.read())
     #print data
-    for key, value in data.items():
-        print value
+    readjson(data,"eng")
 
 #Fetch the Hindi Transcript
 
@@ -47,8 +66,7 @@ def HindiTranscript(url):
     response = urllib.urlopen(url)
     data = json.loads(response.read())
     #print data
-    for key, value in data.items():
-        print value
+    readjson(data,"hi")
 
 all_talk_names= []
 
@@ -58,31 +76,21 @@ for i in xrange(1,12):
 
 list_of_talks = list(set(list_of_talks))
 
-#all_talk_names contains the list of TED Talks in Hindi Language
+#list_of_talks contains the list of TED Talks in Hindi Language
 
 #Go through the list one by one and get the transcripts
 
 for x in list_of_talks:
-    url="https://www.ted.com/"+x+"/transcript.json?"
-    #EnglishTranscript(url)
+    url="https://www.ted.com"+x+"/transcript.json?"
+    EnglishTranscript(url)
     HindiTranscript(url)
 
 
 
-url = "https://www.ted.com//talks/marina_abramovic_an_art_made_of_trust_vulnerability_and_connection/transcript.json?language=en"
-response = urllib.urlopen(url)
-data = json.loads(response.read())
 
 
-def iterate(data):
-    for key, value in data.items():
-        if isinstance(value, dict):
-            print(value)
-            iterate(value)
-            continue
-    
 
-iterate(data)
+
 
 
 
