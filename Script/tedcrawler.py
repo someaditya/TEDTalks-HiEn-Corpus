@@ -55,10 +55,11 @@ def EnglishTranscript(url):
 
     url = url + "language=en"
     print url
-    data = requests.get(url).json()
+    data = requests.get(url)
     print data.status_code
     if data.status_code == 200:
         print data.json()
+    data = data.json()
     #print data
     print("Writing English Transcript")
     readjson(data,"eng")
@@ -70,10 +71,11 @@ def HindiTranscript(url):
     url = url + "language=hi"
     print url
     response = requests.get(url)
-    data = requests.get(url).json()
+    data = requests.get(url)
     print data.status_code
     if data.status_code == 200:
         print data.json()
+    data = data.json()
     #print data
     print("Writing Hindi Transcript")
     readjson(data,"hi")
