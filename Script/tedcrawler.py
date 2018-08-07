@@ -6,6 +6,7 @@ import codecs
 import os,glob
 import json
 import requests
+import time
 
 import sys
 
@@ -96,6 +97,8 @@ for x in list_of_talks:
     url="https://www.ted.com"+x+"/transcript.json?"
     EnglishTranscript(url)
     HindiTranscript(url)
+    print("Sleeping for 60 seconds before htting next URL")
+    time.sleep(60) 
 
 
 
