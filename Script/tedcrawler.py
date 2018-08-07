@@ -13,6 +13,9 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 sentence = ' '
 
+if os.path.exists("hindi.txt"): os.remove("hindi.txt")
+if os.path.exists("english.txt"): os.remove("english.txt")
+    
 #Web Scrapper to fetch the list of TED Talks in Hindi
 
 def List_Talks(path,list):
