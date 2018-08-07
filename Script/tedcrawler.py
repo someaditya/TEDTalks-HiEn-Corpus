@@ -12,7 +12,9 @@ import sys
 
 reload(sys)
 sys.setdefaultencoding('utf8')
+
 sentence = ' '
+count = 0
 
 if os.path.exists("hindi.txt"): os.remove("hindi.txt")
 if os.path.exists("english.txt"): os.remove("english.txt")
@@ -59,11 +61,11 @@ def EnglishTranscript(url):
     data = requests.get(url)
     print data.status_code
     if data.status_code == 200:
-        print data.json()
-    data = data.json()
-    #print data
-    print("Writing English Transcript")
-    readjson(data,"eng")
+        print("Good Response")
+        data = data.json()
+        #print data
+        print("Writing English Transcript")
+        readjson(data,"eng")
 
 #Fetch the Hindi Transcript
 
@@ -75,11 +77,11 @@ def HindiTranscript(url):
     data = requests.get(url)
     print data.status_code
     if data.status_code == 200:
-        print data.json()
-    data = data.json()
-    #print data
-    print("Writing Hindi Transcript")
-    readjson(data,"hi")
+        print("Good Response")
+        data = data.json()
+        #print data
+        print("Writing Hindi Transcript")
+        readjson(data,"hi")
 
 all_talk_names= []
 
@@ -95,10 +97,13 @@ list_of_talks = list(set(list_of_talks))
 
 for x in list_of_talks:
     url="https://www.ted.com"+x+"/transcript.json?"
+    count = count + 1
+    print("Talk no: "+str(count)+" Talk name: "+"https://www.ted.com"+x)
     EnglishTranscript(url)
     HindiTranscript(url)
+    #Sleep 15/60/120/300 seconds to avoid Status Code 429 (Too Many Requests)
     print("Sleeping for 60 seconds before htting next URL")
-    time.sleep(60) 
+    time.sleep(15) 
 
 
 
