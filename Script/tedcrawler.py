@@ -35,8 +35,9 @@ def readjson(data,lang):
         return
     for cues in data['paragraphs']: #iterate through paragraphs node
         for d in cues['cues']: #iterate through cues
-            print d['text']
+            #print d['text']
             sentence =  d['text'] 
+            print(str(sentence).encode('utf-8'))
             if(lang == "hi"):      
                 file = open("hindi.txt","a")
                 file.write(str(sentence).encode('utf-8')+"\n") 
