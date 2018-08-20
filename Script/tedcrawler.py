@@ -13,7 +13,9 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
 
+oldsent = ' '
 sentence = ' '
+
 count = 0
 
 if os.path.exists("hindi.txt"): os.remove("hindi.txt")
@@ -42,7 +44,9 @@ def readjson(data,lang):
     for cues in data['paragraphs']: #iterate through paragraphs node
         for d in cues['cues']: #iterate through cues
             #print d['text']
-            sentence =  d['text'] 
+            #To get rid of the next line error
+            oldsent =  d['text']
+            sentence = oldsent.replace("\n", " ") 
             print(str(sentence).encode('utf-8'))
             if(lang == "hi"):      
                 file = open("hindi.txt","a")
@@ -85,7 +89,7 @@ def HindiTranscript(url):
 
 all_talk_names= []
 
-for i in xrange(1,12):
+for i in xrange(1,13):
     path='https://www.ted.com/talks?language=hi&page=%d'%(i)
     list_of_talks=List_Talks(path,all_talk_names)
 
@@ -101,9 +105,12 @@ for x in list_of_talks:
     print("Talk no: "+str(count)+" Talk name: "+"https://www.ted.com"+x)
     EnglishTranscript(url)
     HindiTranscript(url)
-    #Sleep 15/60/120/300 seconds to avoid Status Code 429 (Too Many Requests)
+    
+    print("Finished talkno "+str(count))
     print("Sleeping for 60 seconds before htting next URL")
-    time.sleep(15) 
+
+    #Sleep 15/60/120/300 seconds to avoid Status Code 429 (Too Many Requests)
+    time.sleep(60) 
 
 
 
